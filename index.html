@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI English: Announcement Text</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfaf6;
+            color: #2d3748;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            height: 300px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 20px;
+        }
+        .audio-bar {
+            width: 3px;
+            height: 100%;
+            background: #4a5568;
+            border-radius: 2px;
+        }
+        .playing .audio-bar {
+            animation: wave 1s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 5px; }
+            50% { height: 20px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigation Header -->
+    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <span class="font-bold text-xl text-indigo-600">Fun English Club</span>
+                <div class="hidden md:flex space-x-4">
+                    <button onclick="showTab('home')" class="nav-link px-3 py-2 font-medium hover:text-indigo-600">Home</button>
+                    <button onclick="showTab('material')" class="nav-link px-3 py-2 font-medium hover:text-indigo-600">Material</button>
+                    <button onclick="showTab('reading')" class="nav-link px-3 py-2 font-medium hover:text-indigo-600">Reading</button>
+                    <button onclick="showTab('listening')" class="nav-link px-3 py-2 font-medium hover:text-indigo-600">Listening</button>
+                </div>
+                <button class="md:hidden text-gray-500" id="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8">
+        
+        <!-- Tab: Home -->
+        <section id="home" class="tab-content active">
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-orange-100">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-semibold">Bahasa Inggris Kelas 9</span>
+                        <h1 class="text-4xl md:text-5xl font-bold mt-4 leading-tight">Mastering <span class="text-indigo-600">Announcements</span></h1>
+                        <p class="mt-4 text-gray-600 text-lg">
+                            Pelajari cara memahami dan membuat pengumuman yang efektif di tempat umum maupun di sekolah.
+                        </p>
+                        <div class="mt-8 space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-green-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">✓</span>
+                                <span>Memahami Struktur Teks Announcement</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-green-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">✓</span>
+                                <span>Melatih kemampuan Reading & Listening</span>
+                            </div>
+                        </div>
+                        <button onclick="showTab('material')" class="mt-10 bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                            Mulai Belajar Sekarang
+                        </button>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl p-6 border-dashed border-2 border-gray-200 flex flex-col items-center justify-center text-center">
+                        <div class="text-6xl mb-4">📢</div>
+                        <p class="font-medium italic">"Attention, please!"</p>
+                        <p class="text-sm text-gray-400 mt-2">Pahami setiap pengumuman dengan mudah melalui aplikasi ini.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Material -->
+        <section id="material" class="tab-content">
+            <div class="space-y-8">
+                <div class="bg-indigo-50 p-6 rounded-2xl">
+                    <h2 class="text-2xl font-bold text-indigo-900 mb-2">Definisi & Fungsi</h2>
+                    <p class="text-indigo-800">Announcement adalah pernyataan publik resmi tentang suatu fakta, kejadian, atau niat/rencana untuk memberikan informasi kepada orang banyak.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <span class="mr-2">🏗️</span> Generic Structure
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="structureChart"></canvas>
+                        </div>
+                        <ul class="mt-4 space-y-3">
+                            <li class="p-3 bg-blue-50 rounded-lg"><strong>Title/Opening:</strong> Memberitahu tujuan pengumuman.</li>
+                            <li class="p-3 bg-purple-50 rounded-lg"><strong>Content:</strong> Detail (What, When, Where, Who).</li>
+                            <li class="p-3 bg-pink-50 rounded-lg"><strong>Closing:</strong> Narahubung (CP) atau pengirim.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <span class="mr-2">🗣️</span> Language Features
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="group p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-colors">
+                                <h4 class="font-bold text-orange-700">Simple Present Tense</h4>
+                                <p class="text-sm">Digunakan untuk fakta saat ini.</p>
+                                <p class="text-xs italic mt-1 font-mono">"The school is closed today."</p>
+                            </div>
+                            <div class="group p-4 bg-gray-50 rounded-xl hover:bg-green-50 transition-colors">
+                                <h4 class="font-bold text-green-700">Simple Future Tense</h4>
+                                <p class="text-sm">Digunakan untuk rencana acara.</p>
+                                <p class="text-xs italic mt-1 font-mono">"We will hold a festival."</p>
+                            </div>
+                            <div class="group p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors">
+                                <h4 class="font-bold text-blue-700">Exact Nouns</h4>
+                                <p class="text-sm">Keterangan waktu & tempat yang jelas.</p>
+                                <p class="text-xs italic mt-1 font-mono">"Monday, Aug 15th at Hall."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Reading -->
+        <section id="reading" class="tab-content">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-indigo-500">
+                    <h3 class="text-lg font-bold mb-4 uppercase tracking-wider text-gray-500">Announcement Text</h3>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-inner text-gray-800 leading-relaxed">
+                        <p class="text-center font-bold text-xl mb-6 underline">ATTENTION ALL STUDENTS!</p>
+                        <p class="mb-4">To celebrate our school's 50th Anniversary, the Student Council will hold a <strong>"School Festival"</strong>. There will be many competitions such as singing, dancing, and English speech.</p>
+                        <div class="grid grid-cols-2 gap-4 my-6 p-4 bg-white rounded-lg border">
+                            <div>
+                                <p class="text-xs text-gray-400">WHEN:</p>
+                                <p class="font-semibold text-sm">Mon - Wed,<br>Aug 15th - 17th, 2026</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">WHERE:</p>
+                                <p class="font-semibold text-sm">School Field &<br>Main Hall</p>
+                            </div>
+                        </div>
+                        <p class="mb-4 text-sm">All classes must register at least one team for each competition. Registration is free and the deadline is <strong>August 10th, 2026</strong>.</p>
+                        <p class="text-sm mb-6">For more information, please contact: <strong>Sarah (Class 9A)</strong>.</p>
+                        <p class="text-right italic font-bold">The Student Council</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border">
+                        <h3 class="text-xl font-bold mb-4">Reading Comprehension</h3>
+                        <div class="space-y-6" id="readingQuestions">
+                            <div>
+                                <p class="text-sm font-medium mb-2">1. What is the purpose of the text?</p>
+                                <input type="text" id="q1" placeholder="Type your answer..." class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none">
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium mb-2">2. How long is the festival?</p>
+                                <select id="q2" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none">
+                                    <option value="">Choose an option...</option>
+                                    <option value="1">One day</option>
+                                    <option value="2">Two days</option>
+                                    <option value="3">Three days</option>
+                                </select>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium mb-2">3. Who is the contact person?</p>
+                                <input type="text" id="q3" placeholder="Type your answer..." class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none">
+                            </div>
+                            <button onclick="checkReading()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-shadow shadow-md">Cek Jawaban</button>
+                            <div id="readingFeedback" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Listening -->
+        <section id="listening" class="tab-content">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+                <div class="bg-indigo-600 p-8 text-white">
+                    <h2 class="text-2xl font-bold">Listening Center</h2>
+                    <p class="opacity-80">Dengarkan dan lengkapi rincian pengumuman berikut.</p>
+                </div>
+                <div class="p-8">
+                    <!-- Audio UI Simulation -->
+                    <div class="bg-gray-100 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+                        <button id="playBtn" onclick="simulateAudio()" class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-white text-2xl hover:scale-105 transition-transform shadow-lg">
+                            ▶
+                        </button>
+                        <div class="flex-1 w-full">
+                            <div class="flex justify-between text-xs mb-2 text-gray-500">
+                                <span>Announcement_Train_Station.mp3</span>
+                                <span id="timer">00:00 / 00:15</span>
+                            </div>
+                            <div class="h-2 bg-gray-300 rounded-full overflow-hidden">
+                                <div id="audioProgress" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div class="audio-wave" id="audioWave">
+                                    <div class="audio-bar" style="height: 10px;"></div>
+                                    <div class="audio-bar" style="height: 15px;"></div>
+                                    <div class="audio-bar" style="height: 12px;"></div>
+                                    <div class="audio-bar" style="height: 18px;"></div>
+                                    <div class="audio-bar" style="height: 8px;"></div>
+                                </div>
+                                <span class="text-xs font-bold text-indigo-600 animate-pulse hidden" id="statusLabel">PLAYING AUDIO...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="transcriptBox" class="hidden mb-8 p-6 bg-yellow-50 border border-yellow-200 rounded-xl italic text-gray-700">
+                        "Attention, please. The Argo Bromo Anggrek train to <strong>Jakarta</strong> will depart from <strong>Platform 3</strong> in approximately <strong>fifteen minutes</strong>. Passengers, please proceed to the platform immediately. Prepare your <strong>tickets</strong>. Thank you."
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-bold mb-4 text-gray-800">Fill in the Blanks:</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-400">1.</span>
+                                    <input type="text" id="l1" placeholder="Destination?" class="flex-1 p-2 border-b-2 border-gray-200 focus:border-indigo-500 outline-none bg-transparent">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-400">2.</span>
+                                    <input type="text" id="l2" placeholder="Platform number?" class="flex-1 p-2 border-b-2 border-gray-200 focus:border-indigo-500 outline-none bg-transparent">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-400">3.</span>
+                                    <input type="text" id="l3" placeholder="Depart in... minutes?" class="flex-1 p-2 border-b-2 border-gray-200 focus:border-indigo-500 outline-none bg-transparent">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-400">4.</span>
+                                    <input type="text" id="l4" placeholder="Ready for inspection?" class="flex-1 p-2 border-b-2 border-gray-200 focus:border-indigo-500 outline-none bg-transparent">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-2xl flex flex-col items-center justify-center text-center">
+                            <p class="text-sm text-gray-500 mb-4">Selesaikan tugas ini untuk melihat transkrip lengkap.</p>
+                            <button onclick="checkListening()" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-900 transition-colors">Cek Jawaban</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 py-8 bg-white border-t text-center text-gray-400 text-sm">
+        <p>&copy; 2024 Interactive Learning Media - English SMP Grade 9</p>
+    </footer>
+
+    <script>
+        // Tab Management
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            
+            // Re-render chart if switching to material tab
+            if (tabId === 'material') {
+                renderChart();
+            }
+        }
+
+        // Chart.js - Generic Structure Visualization
+        function renderChart() {
+            const ctx = document.getElementById('structureChart').getContext('2d');
+            
+            // Check if chart already exists
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Opening', 'Content', 'Closing'],
+                    datasets: [{
+                        data: [20, 65, 15],
+                        backgroundColor: ['#6366f1', '#a855f7', '#ec4899'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // Reading Activity Logic
+        function checkReading() {
+            const feedback = document.getElementById('readingFeedback');
+            const q1 = document.getElementById('q1').value.toLowerCase();
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value.toLowerCase();
+            
+            let score = 0;
+            if (q1.includes('festival') || q1.includes('celebrate')) score++;
+            if (q2 === "3") score++;
+            if (q3.includes('sarah')) score++;
+
+            feedback.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'bg-orange-100');
+            
+            if (score === 3) {
+                feedback.innerHTML = "🌟 Luar biasa! Semua jawaban benar.";
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else if (score > 0) {
+                feedback.innerHTML = `👍 Cukup baik! Kamu menjawab ${score} dari 3 pertanyaan dengan benar. Ayo teliti lagi.`;
+                feedback.classList.add('bg-orange-100', 'text-orange-700');
+            } else {
+                feedback.innerHTML = "❌ Silakan baca teks kembali dan coba lagi.";
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        // Listening Activity Simulation
+        let isPlaying = false;
+        function simulateAudio() {
+            if (isPlaying) return;
+            isPlaying = true;
+            
+            const playBtn = document.getElementById('playBtn');
+            const progress = document.getElementById('audioProgress');
+            const timer = document.getElementById('timer');
+            const wave = document.getElementById('audioWave');
+            const status = document.getElementById('statusLabel');
+            
+            playBtn.innerHTML = "⏸";
+            playBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            wave.parentElement.classList.add('playing');
+            status.classList.remove('hidden');
+
+            let current = 0;
+            const duration = 15;
+            const interval = setInterval(() => {
+                current++;
+                const percentage = (current / duration) * 100;
+                progress.style.width = `${percentage}%`;
+                timer.innerHTML = `00:${current.toString().padStart(2, '0')} / 00:15`;
+                
+                if (current >= duration) {
+                    clearInterval(interval);
+                    isPlaying = false;
+                    playBtn.innerHTML = "▶";
+                    playBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    wave.parentElement.classList.remove('playing');
+                    status.classList.add('hidden');
+                    alert("Selesai mendengarkan. Silakan isi jawaban kamu.");
+                }
+            }, 1000);
+        }
+
+        function checkListening() {
+            const l1 = document.getElementById('l1').value.toLowerCase();
+            const l2 = document.getElementById('l2').value;
+            const l3 = document.getElementById('l3').value;
+            const l4 = document.getElementById('l4').value.toLowerCase();
+            
+            if (l1.includes('jakarta') && l2 === "3" && (l3 === "15" || l3 === "fifteen") && l4.includes('ticket')) {
+                document.getElementById('transcriptBox').classList.remove('hidden');
+                alert("Jawaban kamu benar! Transkrip sekarang dapat dibaca.");
+            } else {
+                alert("Beberapa jawaban masih kurang tepat. Coba dengarkan simulasi lagi!");
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const navLinks = document.querySelector('.md\\:flex');
+            navLinks.classList.toggle('hidden');
+            navLinks.classList.toggle('flex');
+            navLinks.classList.toggle('flex-col');
+            navLinks.classList.toggle('absolute');
+            navLinks.classList.toggle('top-16');
+            navLinks.classList.toggle('left-0');
+            navLinks.classList.toggle('w-full');
+            navLinks.classList.toggle('bg-white');
+            navLinks.classList.toggle('p-4');
+            navLinks.classList.toggle('shadow-lg');
+        });
+
+        // Initialize first chart
+        window.onload = () => {
+            // Check if on material tab but for mobile or refresh
+            if(document.getElementById('material').classList.contains('active')) {
+                renderChart();
+            }
+        };
+    </script>
+</body>
+</html>
